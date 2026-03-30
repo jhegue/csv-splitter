@@ -1,4 +1,4 @@
-# Data Splitter
+# CSV Splitter
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?logo=streamlit&logoColor=white)
@@ -7,7 +7,7 @@
 
 Aplicação Streamlit para dividir um arquivo CSV grande em múltiplos arquivos menores com base em uma coluna escolhida pelo usuário, entregando tudo em um único arquivo `.zip`.
 
-Também chamada de **Divisor CSV**, a aplicação foi pensada para simplificar fluxos operacionais em que um dataset precisa ser separado por unidade, categoria, regional, curso, cliente ou qualquer outro valor único existente em uma coluna.
+Também chamada de **Divisor CSV**, a aplicação foi pensada para simplificar fluxos operacionais em que um dataset precisa ser separado por unidade, categoria, regional, cliente ou qualquer outro valor único existente em uma coluna.
 
 ## ✨ Visão Geral
 
@@ -45,7 +45,10 @@ Antes de executar a aplicação, tenha instalado:
 ### 1. Clone o repositório
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
+git clone https://github.com/jhegue/data-splitter.git
+```
+
+```bash
 cd data-splitter
 ```
 
@@ -55,6 +58,9 @@ No Windows:
 
 ```bash
 python -m venv venv
+```
+
+```bash
 venv\Scripts\activate
 ```
 
@@ -62,6 +68,9 @@ No Linux/macOS:
 
 ```bash
 python3 -m venv venv
+```
+
+```bash
 source venv/bin/activate
 ```
 
