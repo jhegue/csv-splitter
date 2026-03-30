@@ -186,9 +186,3 @@ Algumas evoluções possíveis para o projeto:
 - incluir histórico de execuções;
 - adicionar exportação para mais formatos;
 - disponibilizar deploy em ambiente cloud.
-
-## 📄 Licença
-
-Este projeto pode ser distribuído sob a licença **MIT**.
-
-Se desejar, você pode adicionar um arquivo `LICENSE` na raiz com o texto oficial da licença MIT.
