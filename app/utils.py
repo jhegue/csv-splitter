@@ -53,13 +53,13 @@ def sanitize_filename(value: object, used_names: set[str], extension: str) -> st
     """
 
     if pd.isna(value) or str(value).strip() == "":
-        base_name = "sem_valor"
+        base_name = "no_value"
     else:
         base_name = str(value).strip()
 
     base_name = _INVALID_FILENAME_PATTERN.sub("_", base_name)
     base_name = _WHITESPACE_PATTERN.sub("_", base_name).strip("._")
-    base_name = base_name or "sem_valor"
+    base_name = base_name or "no_value"
 
     candidate = base_name
     suffix = 2

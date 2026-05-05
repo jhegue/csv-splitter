@@ -15,11 +15,11 @@ from ui.components import (
     render_download_section,
     render_empty_upload_state,
     render_header,
-    render_invalid_dataframe_state,
     render_metrics_section,
     render_preview_section,
     render_success_feedback,
     render_upload_input,
+    validate_dataframe,
 )
 from ui.styles import apply_theme_overrides, configure_page
 
@@ -53,7 +53,7 @@ def main() -> None:
             st.error(str(exc))
             return
 
-        if not render_invalid_dataframe_state(read_result.dataframe):
+        if not validate_dataframe(read_result.dataframe):
             return
 
         current_selection = initialize_output_session_state(
@@ -72,7 +72,7 @@ def main() -> None:
 
         try:
             archive_result = build_archive_cached(
-                file_bytes=file_bytes,
+                dataframe=read_result.dataframe,
                 split_column=split_column,
                 output_format=output_selection.output_format,
                 output_delimiter=output_selection.output_delimiter,

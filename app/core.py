@@ -2,23 +2,12 @@
 
 from __future__ import annotations
 
+import pandas as pd
+
 from app.config import DEFAULT_OUTPUT_FORMAT, OUTPUT_FORMATS
 from app.models import ArchiveBuildResult, CsvReadResult, OutputSelection
-from app.processor import build_zip_archive_from_dataframe, read_csv_bytes
-from app.utils import build_file_key, format_count, format_delimiter, sanitize_stem
-
-
-def load_csv_document(file_bytes: bytes) -> CsvReadResult:
-    """Reads and parses an uploaded CSV document.
-
-    Args:
-        file_bytes: Raw bytes from the uploaded file.
-
-    Returns:
-        Parsed CSV read result.
-    """
-
-    return read_csv_bytes(file_bytes)
+from app.processor import build_zip_archive_from_dataframe
+from app.utils import format_count, format_delimiter, sanitize_stem
 
 
 def resolve_output_selection(
@@ -60,21 +49,6 @@ def resolve_output_selection(
     )
 
 
-def build_file_identity(file_name: str, file_size: int, delimiter: str) -> str:
-    """Builds a stable identifier for an uploaded file.
-
-    Args:
-        file_name: Uploaded filename.
-        file_size: File size in bytes.
-        delimiter: Detected delimiter from the source CSV.
-
-    Returns:
-        A stable identifier string.
-    """
-
-    return build_file_key(file_name=file_name, file_size=file_size, delimiter=delimiter)
-
-
 def build_success_message(read_result: CsvReadResult) -> str:
     """Builds the success feedback message shown after a file is loaded.
 
@@ -105,7 +79,7 @@ def build_delimiter_metric_value(
         Display value for the delimiter metric.
     """
 
-    if output_format == "csv":
+    if output_format == DEFAULT_OUTPUT_FORMAT:
         return format_delimiter(output_delimiter)
 
     return "Not used"
@@ -122,7 +96,7 @@ def build_delivery_caption(output_format: str, output_delimiter: str) -> str:
         Caption text for the current export configuration.
     """
 
-    if output_format == "csv":
+    if output_format == DEFAULT_OUTPUT_FORMAT:
         return (
             "The final delivery is generated as a single ZIP file using "
             f"{format_delimiter(output_delimiter)} for CSV output."
@@ -149,7 +123,7 @@ def build_generated_files_message(
 
     output_label = OUTPUT_FORMATS[output_format]["label"]
 
-    if output_format == "csv":
+    if output_format == DEFAULT_OUTPUT_FORMAT:
         return (
             f"Generated files: **{format_count(total_files)}** in **{output_label}** "
             f"using **{format_delimiter(output_delimiter)}**."
@@ -159,15 +133,15 @@ def build_generated_files_message(
 
 
 def build_archive(
-    file_bytes: bytes,
+    dataframe: pd.DataFrame,
     split_column: str,
     output_format: str,
     output_delimiter: str,
 ) -> ArchiveBuildResult:
-    """Builds the final ZIP archive from an uploaded CSV file.
+    """Builds the final ZIP archive from a parsed DataFrame.
 
     Args:
-        file_bytes: Raw uploaded file bytes.
+        dataframe: Already-parsed source DataFrame.
         split_column: Column used to split the CSV.
         output_format: Selected output format.
         output_delimiter: Selected output delimiter.
@@ -176,9 +150,8 @@ def build_archive(
         ZIP archive result.
     """
 
-    read_result = load_csv_document(file_bytes)
     return build_zip_archive_from_dataframe(
-        dataframe=read_result.dataframe,
+        dataframe=dataframe,
         split_column=split_column,
         output_format=output_format,
         output_delimiter=output_delimiter,

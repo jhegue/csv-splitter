@@ -78,7 +78,7 @@ def read_csv_bytes(file_bytes: bytes) -> CsvReadResult:
 
     logger.error("Unable to read the uploaded CSV file.")
     raise ValueError(
-        "Não foi possível ler o arquivo CSV enviado. Verifique o separador ou a codificação do arquivo."
+        "Unable to read the uploaded CSV file. Please check the file delimiter or encoding."
     ) from last_error
 
 
@@ -101,7 +101,7 @@ def serialize_dataframe(
         ValueError: If the requested format is unsupported or unavailable.
     """
 
-    if output_format == "csv":
+    if output_format == DEFAULT_OUTPUT_FORMAT:
         return dataframe.to_csv(sep=output_delimiter, index=False).encode("utf-8-sig")
 
     if output_format == "parquet":
@@ -111,7 +111,7 @@ def serialize_dataframe(
         except (ImportError, ValueError) as exc:
             logger.exception("Failed to export dataframe to parquet.")
             raise ValueError(
-                "Não foi possível gerar arquivos em parquet neste ambiente."
+                "Parquet export is not available in this environment."
             ) from exc
 
         return buffer.getvalue()
@@ -125,7 +125,7 @@ def serialize_dataframe(
         ).encode("utf-8")
 
     logger.error("Unsupported output format received: %s", output_format)
-    raise ValueError("Formato de saída inválido.")
+    raise ValueError("Invalid output format.")
 
 
 def build_zip_archive_from_dataframe(
@@ -151,11 +151,11 @@ def build_zip_archive_from_dataframe(
 
     if split_column not in dataframe.columns:
         logger.error("Split column %s was not found in dataframe.", split_column)
-        raise ValueError("A coluna selecionada para divisão não existe no arquivo.")
+        raise ValueError("The selected split column does not exist in the file.")
 
     if output_format not in OUTPUT_FORMATS:
         logger.error("Unsupported output format received: %s", output_format)
-        raise ValueError("Formato de saída inválido.")
+        raise ValueError("Invalid output format.")
 
     zip_buffer = io.BytesIO()
     used_names: set[str] = set()
