@@ -9,7 +9,7 @@ import zipfile
 
 import pandas as pd
 
-from app.config import OUTPUT_FORMATS, SUPPORTED_DELIMITERS, SUPPORTED_ENCODINGS
+from app.config import DEFAULT_OUTPUT_FORMAT, OUTPUT_FORMATS, SUPPORTED_DELIMITERS, SUPPORTED_ENCODINGS
 from app.models import ArchiveBuildResult, CsvReadResult
 from app.utils import sanitize_filename
 
