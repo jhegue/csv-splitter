@@ -91,8 +91,15 @@ def build_archive_cached(
 def render_header() -> None:
     """Renders the application header."""
 
-    st.title(APP_TITLE)
-    st.caption(APP_DESCRIPTION)
+    st.markdown(
+        f"""
+        <div class="app-header">
+            <h1 class="app-header__title">{escape(APP_TITLE)}</h1>
+            <p class="app-header__description">{escape(APP_DESCRIPTION)}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_upload_input() -> UploadedFile | None:
